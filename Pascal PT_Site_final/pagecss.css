@@ -1,0 +1,25 @@
+﻿a:link
+{
+	color:red; 
+}
+a:visited
+{
+	color: rgb(55,255,66); 
+} 
+a:active 
+{
+	color: rgb(170,2,220);
+}
+body
+{
+	font-family: Arial, Helvetica;
+	font-size:medium;
+	color:black;
+}
+h1, h2, h3, h4, h5, h6
+{
+	font-family: Arial, Helvetica;
+	color:black;
+}
+
+	

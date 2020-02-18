@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<title>Dessins</title>
+<meta name="author" content="Pascal Pelletier-Thériault"/>
+<meta name="description" content="Ce site est un portfolio des différents projets que j’ai pu réaliser. Cette page est dédiée aux montages vidéo et photo."/>
+<meta name="keywords" content="Portfolio, Pascal Pelletier-Thériault, montage, montages, projet, photo, collage"/>
+  
+<style type="text/css">
+img { 
+margin-bottom: -5px;
+}
+.auto-style1 {
+	border: 3px solid #000000;
+	background-color: #808080;
+}
+.auto-style2 {
+	border-width: 0;
+}
+.auto-style3 {
+	background-color: #808080;
+}
+.auto-style5 {
+	border: 3px solid #000000;
+	background-color: #000000;
+}
+.auto-style6 {
+	text-align: center;
+}
+.auto-style11 {
+	border-width: 0px;
+}
+.auto-style12 {
+	text-align: left;
+}
+</style>
+<script type="text/javascript">
+<!--
+function FP_swapImg() {//v1.0
+ var doc=document,args=arguments,elm,n; doc.$imgSwaps=new Array(); for(n=2; n<args.length;
+ n+=2) { elm=FP_getObjectByID(args[n]); if(elm) { doc.$imgSwaps[doc.$imgSwaps.length]=elm;
+ elm.$src=elm.src; elm.src=args[n+1]; } }
+}
+
+function FP_preloadImgs() {//v1.0
+ var d=document,a=arguments; if(!d.FP_imgs) d.FP_imgs=new Array();
+ for(var i=0; i<a.length; i++) { d.FP_imgs[i]=new Image; d.FP_imgs[i].src=a[i]; }
+}
+
+function FP_getObjectByID(id,o) {//v1.0
+ var c,el,els,f,m,n; if(!o)o=document; if(o.getElementById) el=o.getElementById(id);
+ else if(o.layers) c=o.layers; else if(o.all) el=o.all[id]; if(el) return el;
+ if(o.id==id || o.name==id) return o; if(o.childNodes) c=o.childNodes; if(c)
+ for(n=0; n<c.length; n++) { el=FP_getObjectByID(id,c[n]); if(el) return el; }
+ f=o.forms; if(f) for(n=0; n<f.length; n++) { els=f[n].elements;
+ for(m=0; m<els.length; m++){ el=FP_getObjectByID(id,els[n]); if(el) return el; } }
+ return null;
+}
+
+function FP_swapImgRestore() {//v1.0
+ var doc=document,i; if(doc.$imgSwaps) { for(i=0;i<doc.$imgSwaps.length;i++) {
+  var elm=doc.$imgSwaps[i]; if(elm) { elm.src=elm.$src; elm.$src=null; } } 
+  doc.$imgSwaps=null; }
+}
+// -->
+</script>
+<script language="javascript">
+
+var img_m="0";
+
+function Imgmoins(){
+var image_m = document.getElementById("Oeuvre_m"); var texte_m = document.getElementById("Description_m"); var Titre_projet_m=document.getElementById("Titre_m");
+if(img_m=="0"){image_m.src="Projet/Poster.jpg";texte_m.innerHTML="Le projet consistait à faire une affiche.";Titre_projet_m.innerHTML="<b>Affiche</b>";
+img_m="10"}
+else if(img_m=="10"){image_m.src="Projet/Pascal_Pelletier-Thériault_verso_dépliant.jpg";texte_m.innerHTML="Le projet consistait à faire un dépliant sur une maladie.";Titre_projet_m.innerHTML="<b>Dépliant (verso)</b>";
+img_m="9"}
+else if(img_m=="9"){image_m.src="Projet/Pascal_Pelletier-thériault_recto_Dépliant.jpg";texte_m.innerHTML="Le projet consistait à faire un dépliant sur une maladie.";Titre_projet_m.innerHTML="<b>Dépliant (recto)</b>";
+img_m="8"}
+else if(img_m=="8"){image_m.src="Projet/Pascal_Pelletier-theriault_monstre_final.jpg";texte_m.innerHTML="Le projet consistait à faire un monstre à partir d'une photo de nous-même";Titre_projet_m.innerHTML="<b>Monstre</b>";
+img_m="7"}
+else if(img_m=="7"){image_m.src="Projet/Pascal_Pelletier-Thériault_Les_oiseaux_de_la différence.jpg";texte_m.innerHTML="Le projet consistait à faire un montage photo sur la paix";Titre_projet_m.innerHTML="<b>Les oiseaux de la différence</b>";
+img_m="6"}
+else if(img_m=="6"){image_m.src="Projet/monstre_final_(gentil)_pascal_pelletier-thériault.jpg";texte_m.innerHTML="Le projet consistait à modifier une image de nous-même.";Titre_projet_m.innerHTML="<b>Révélation</b>";
+img_m="5"}
+else if(img_m=="5"){image_m.src="Projet/magazine.jpg";texte_m.innerHTML="Le projet consistait à faire une couverture de magazine";Titre_projet_m.innerHTML="<b>Légumia</b>";
+img_m="4"}
+else if(img_m=="4"){image_m.src="Projet/La_Créativité.jpg";texte_m.innerHTML="Le projet consistait à faire une affiche sur la créativité.";Titre_projet_m.innerHTML="<b>La créativité</b>";
+img_m="3"}
+else if(img_m=="3"){image_m.src="Projet/dessins_laite.jpg";texte_m.innerHTML="Le projet consistait à modifier une photo quelconque";Titre_projet_m.innerHTML="<b>Un beau maquillage</b>";
+img_m="2"}
+else if(img_m=="2"){image_m.src="Projet/CD_pochetter.jpg";texte_m.innerHTML="Le projet consistait à faire une pochette pour un CD.";Titre_projet_m.innerHTML="<b>Pochette CD</b>";
+img_m="1"}
+else if(img_m=="1"){image_m.src="Projet/Agenda.jpg";texte_m.innerHTML="Le projet consistait à faire la couverture pour l'agenda de l'école.";Titre_projet_m.innerHTML="<b>L'agenda</b>";
+img_m="0"}
+}
+
+
+function Imgplus(){
+var image_m = document.getElementById("Oeuvre_m"); var texte_m = document.getElementById("Description_m"); var Titre_projet_m = document.getElementById("Titre_m");
+if(img_m=="9"){image_m.src="Projet/Poster.jpg";texte_m.innerHTML="Le projet consistait à dessiner avec Adobe Illustrator un logo pour un chandail.";Titre_projet_m.innerHTML="<b>Affiche</b>";
+img_m="10"}
+else if(img_m=="8"){image_m.src="Projet/Pascal_Pelletier-Thériault_verso_dépliant.jpg";texte_m.innerHTML="Le projet consistait à faire un dépliant sur une maladie.";Titre_projet_m.innerHTML="<b>Dépliant (verso)</b>";
+img_m="9"}
+else if(img_m=="7"){image_m.src="Projet/Pascal_Pelletier-Thériault_verso_dépliant.jpg";texte_m.innerHTML="Le projet consistait à faire un dépliant sur une maladie.";Titre_projet_m.innerHTML="<b>Dépliant (recto)</b>";
+img_m="8"}
+else if(img_m=="6"){image_m.src="Projet/Pascal_Pelletier-theriault_monstre_final.jpg";texte_m.innerHTML="Le projet consistait à faire un monstre à partir d'une photo de nous-même";Titre_projet_m.innerHTML="<b>Monstre</b>";
+img_m="7"}
+else if(img_m=="5"){image_m.src="Projet/Pascal_Pelletier-Thériault_Les_oiseaux_de_la différence.jpg";texte_m.innerHTML="Le projet consistait à faire un montage photo sur la paix";Titre_projet_m.innerHTML="<b>Les oiseaux de la différence</b>";
+img_m="6"}
+else if(img_m=="4"){image_m.src="Projet/monstre_final_(gentil)_pascal_pelletier-thériault.jpg";texte_m.innerHTML="Le projet consistait à modifier une image de nous-même.";Titre_projet_m.innerHTML="<b>Révélation</b>";
+img_m="5"}
+else if(img_m=="3"){image_m.src="Projet/magazine.jpg";texte_m.innerHTML="Le projet consistait à faire une couverture de magazine";Titre_projet_m.innerHTML="<b>Légumia</b>";
+img_m="4"}
+else if(img_m=="2"){image_m.src="Projet/La_Créativité.jpg";texte_m.innerHTML="Le projet consistait à faire une affiche sur la créativité.";Titre_projet_m.innerHTML="<b>La créativité</b>";
+img_m="3"}
+else if(img_m=="1"){image_m.src="Projet/dessins_laite.jpg";texte_m.innerHTML="Le projet consistait à modifier une photo quelconque";Titre_projet_m.innerHTML="<b>Un beau maquillage</b>";
+img_m="2"}
+else if(img_m=="0"){image_m.src="Projet/CD_pochetter.jpg";texte_m.innerHTML="Le projet consistait à faire une pochette pour un CD.";Titre_projet_m.innerHTML="<b>Pochette CD</b>";
+img_m="1"}
+else if(img_m=="10"){image_m.src="Projet/Agenda.jpg";texte_m.innerHTML="Le projet consistait à faire la couverture pour l'agenda de l'école.";Titre_projet_m.innerHTML="<b>L'agenda</b>";
+img_m="0"}
+}
+
+
+var Vid="GIF"
+function Vidplus(){
+var Vidéo = document.getElementById("Oeuvre_Vid"); var texte_Vid = document.getElementById("Description_Vid"); var Titre_Vid = document.getElementById("Titre_Vid"); 
+if(Vid=="Prés."){Vidéo.src="Projet/GIF_Homer.mp4"; texte_Vid.innerHTML="Le projet consistait à faire une image animée de format GIF.";Titre_Vid.innerHTML="<b>Projet GIF</b>";
+Vid ="GIF"}
+else if(Vid=="GIF"){Vidéo.src="Projet/Presentation_art_et_info.mp4";texte_Vid.innerHTML="Le projet consistait à faire une vidéo promotionnelle pour le <br> cours d'art et infographie de mon école."; Titre_Vid.innerHTML="<b>Vidéo promotionnelle</b>"; 
+Vid="Prés."}
+}
+
+function Vidmoins(){
+var Vidéo = document.getElementById("Oeuvre_Vid"); var texte_Vid = document.getElementById("Description_Vid"); var Titre_Vid = document.getElementById("Titre_Vid"); 
+if(Vid=="Prés."){Vidéo.src="Projet/GIF_Homer.mp4"; texte_Vid.innerHTML="Le projet consistait à faire une image animée de format GIF.";Titre_Vid.innerHTML="<b>Projet GIF</b>";
+Vid ="GIF"}
+else if(Vid=="GIF"){Vidéo.src="Projet/Presentation_art_et_info.mp4";texte_Vid.innerHTML="Le projet consistait à faire une vidéo promotionnelle pour le <br> cours d'art et infographie de mon école."; Titre_Vid.innerHTML="<b>Vidéo promotionnelle</b>"; 
+Vid="Prés."}
+}
+
+
+
+</script>
+</head>
+
+<body onload="FP_preloadImgs(/*url*/'Boutons_et_Images_créés/Logiciels_gris.jpg',/*url*/'Boutons_et_Images_créés/Livre_gris.jpg',/*url*/'Boutons_et_Images_créés/Pour_me_contacter_gris.jpg',/*url*/'Boutons_et_Images_créés/Accueil_gris.jpg',/*url*/'Boutons_et_Images_créés/Flèche_droit_gris.png',/*url*/'Boutons_et_Images_créés/Dessins_gris.jpg')" style="margin-left: 30px; margin-right: 30px; margin-bottom: 15px; background-color: #FFFFFF; background-image: url('Boutons_et_Images_créés/White-Gray-Wallpaper.jpeg'); background-repeat: no-repeat; background-attachment:fixed;">
+
+<table style="height: 160px" class="auto-style1" align="center" cellpadding="0" cellspacing="0" style="position:static">
+	<tr>
+		<td class="auto-style2">
+		<a href="default.html" target="_self">
+		<img alt="Logo du site" longdesc="Appareil photographique instantané" src="Boutons_et_Images_créés/Logo_film.jpg" height="160" width="225" class="auto-style2"></a></td>
+		<td class="auto-style2">
+		<img alt="Colonne" height="160" src="Boutons_et_Images_créés/Colonne.jpg" width="3"></td>
+		<td class="auto-style2" style="width: 100%; height: 100%">
+		
+<marquee align="center" scrolldelay="5" scrollamount="3" onmouseout="this.start()" onmouseover="this.stop()" class="auto-style3" style="height: 160px"> 
+<img border="0" alt="Agenda" height="160px" longdesc="Page couverture pour agenda de l'école (concours)" src="Projet/Agenda.jpg" width="15%" >
+<img border="0" alt="CD pochet" height="160px" longdesc="Montage photo d'un album CD" src="Projet/CD_pochetter.jpg" width="15%" >
+<img border="0" alt="Maquillage 2.0" height="160px" src="Projet/dessins_laite.jpg" width="15%" >
+<img border="0" alt="Évolution" height="160px" src="Projet/evolution_eevee.jpg" width="15%" >
+<img border="0" alt="La Créativité" height="160px" src="Projet/La_Créativité.jpg" width="15%" >
+<img border="0" alt="Logo gilet" height="160px" src="Projet/logo_gilet.png" width="15%" >
+<img border="0" alt="Logo poster" height="160px" src="Projet/logo_poster.png" width="15%" >
+<img border="0" alt="Magazine" height="160px" src="Projet/magazine.jpg" width="15%" >
+<img border="0" alt="Maladie logo" height="160px" src="Projet/Maladie_logo.jpg" width="15%" >
+<img border="0" alt="monstre" height="160px" src="Projet/Pascal_Pelletier-theriault_monstre_final.jpg" width="15%" >
+<img border="0" alt="Pascal Pelletier-thériault recto Dépliant" height="160px" src="Projet/Pascal_Pelletier-thériault_recto_Dépliant.jpg" width="15%" >
+<img border="0" alt="Pascal Pelletier-Thériault verso Dépliant" height="160px" src="Projet/Pascal_Pelletier-Thériault_verso_dépliant.jpg" width="15%" >
+<img border="0" alt="Pascal Pelletier-Thériault Les oiseaux de la difference" height="160px" src="Projet/Pascal_Pelletier-Thériault_Les_oiseaux_de_la différence.jpg" width="15%" >
+<img border="0" alt="monstre méchant" height="160px" src="Projet/monstre_final_(gentil)_pascal_pelletier-thériault.jpg" width="15%">
+<img border="0" alt="GIF Homer" height="160px" src="Projet/GIF_Homer.gif" width="15%" >
+<img border="0" alt="photo dessin" height="160px" src="Projet/photo_dessin.jpg" width="15%" >
+<img border="0" alt="Poster" height="160px" src="Projet/Poster.jpg" width="15%" >
+</marquee>
+
+
+</td>
+	</tr>
+</table>
+<header><h1 class="auto-style6">Montages</h1></header>
+<nav>
+<table style="width: 100%; height: 40px; left: 0px; top: 0px;" cellpadding="0" cellspacing="0" class="boutons" style="position:static">
+	<tr>
+		<td style="width: 50%; height: 40px">
+		</td>
+		<td style="width: 203px; height: 40px" class="auto-style5">
+		<a href="default.html">
+		<img alt="Accueil" height="40" src="Boutons_et_Images_créés/Accueil.jpg" width="128" id="img1" onmouseout="FP_swapImgRestore()" onmouseover="FP_swapImg(1,1,/*id*/'img1',/*url*/'Boutons_et_Images_créés/Accueil_gris.jpg')" class="auto-style11"></a></td>
+		<td style="width: 145px; height: 40px" class="auto-style5">
+		<a href="Logiciels.html">
+		<img alt="Logiciels" height="40" src="Boutons_et_Images_créés/Logiciels.jpg" width="145" id="img2" onmouseout="FP_swapImgRestore()" onmouseover="FP_swapImg(1,1,/*id*/'img2',/*url*/'Boutons_et_Images_créés/Logiciels_gris.jpg')" class="auto-style2"></a></td>
+		<td style="width: 168px; height: 40px" class="auto-style5">
+		<a href="Dessins.html">
+		<img alt="Dessins" height="40" src="Boutons_et_Images_créés/Dessins.jpg" width="130" id="img3" onmouseout="FP_swapImgRestore()" onmouseover="FP_swapImg(1,1,/*id*/'img3',/*url*/'Boutons_et_Images_créés/Dessins_gris.jpg')" class="auto-style2"></a></td>
+		<td style="width: 111px; height: 40px" class="auto-style5">
+		<a href="Livre.html">
+		<img alt="Livre" height="40" src="Boutons_et_Images_créés/Livre.jpg" width="111" id="img4" onmouseout="FP_swapImgRestore()" onmouseover="FP_swapImg(1,1,/*id*/'img4',/*url*/'Boutons_et_Images_créés/Livre_gris.jpg')" class="auto-style2"></a></td>
+		<td style="width: 357px; height: 40px" class="auto-style5">
+		<a href="Pour_me_contacter.html">
+		<img alt="Pour me contacter" height="40" src="Boutons_et_Images_créés/Pour_me_contacter.jpg" width="357" id="img5" onmouseout="FP_swapImgRestore()" onmouseover="FP_swapImg(1,1,/*id*/'img5',/*url*/'Boutons_et_Images_créés/Pour_me_contacter_gris.jpg')" class="auto-style2"></a></td>
+		<td style="width: 50%; height: 40px">
+		&nbsp;</td>
+	</tr>
+</table>
+</nav>
+
+&nbsp;
+<p></p>
+<h2 class="auto-style6">Montages photo</h2>
+
+
+
+
+
+
+<table align="center" cellpadding="0" cellspacing="0" style="width: 100%; height: 100%">
+	<tr>
+		<td class="auto-style6" valign="top" >
+		<table align="center" cellpadding="20" cellspacing="0">
+			<tr>
+				<td style="height: 10%">&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="height: 70%">
+				<button onclick="Imgmoins()"><img alt="Flèche" src="Boutons_et_Images_créés/Flèche_gauche.png" height="100" width="89"></button></td>
+			</tr>
+			<tr>
+				<td style="height: 20%">&nbsp;</td>
+			</tr>
+		</table>
+		</td>
+		<td class="auto-style6" style="height: 100%">
+		<table align="center" cellpadding="0" cellspacing="0">
+			<tr>
+				<td style="width: 100%; height: 100%">
+				<img src="Boutons_et_Images_créés/Agenda.jpg" id="Oeuvre_m" height="638" width="500"> </td>
+			</tr>
+			<tr>
+				<td style="height: 19px">&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="height: 19px">
+				<p id="Titre_m">
+				<b>Concours « agenda »</b>
+				<ul>
+				<li class="auto-style12"><b>Créateur:</b> Pascal Pelletier-Thériault</li>
+				<li class="auto-style12"><b>Logiciel utilisé:</b> 
+				<a href="https://www.adobe.com/products/photoshop.html?sdid=KKQIN&amp;mv=search&amp;s_kwcid=AL!3085!3!226997989086!e!!g!!photoshop&amp;ef_id=WZJvFAAAAEqaZhFT:20180507023823:s" target="_blank">Photoshop</a></li>
+				</ul>
+				<p id="Description_m">Le projet consistait à élaborer la page 
+				couverture de l'agenda de l'école.</p>
+				</td>
+			</tr>
+		</table>
+		</td>
+		<td class="auto-style6" valign="top">	<table align="center" cellpadding="20" cellspacing="0">
+			<tr>
+				<td style="height: 10%">&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="height: 70%">
+				<button onclick="Imgplus()"><img alt="Flèche" src="Boutons_et_Images_créés/Flèche_droit.png" height="100" width="89"></button></td>
+			</tr>
+			<tr>
+				<td style="height: 20%">&nbsp;</td>
+			</tr>
+		</table>
+</td>
+	</tr>
+</table>
+
+&nbsp;
+<p>&nbsp;</p>
+<h2 class="auto-style6">Montages vidéo</h2>
+<table align="center" cellpadding="0" cellspacing="0" style="width: 100%; height: 100%">
+	<tr>
+		<td class="auto-style6" valign="top" ><table align="center" cellpadding="20" cellspacing="0">
+			<tr>
+				<td style="height: 10%">&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="height: 70%">
+				<button onclick="Vidmoins()"><img alt="Flèche" src="Boutons_et_Images_créés/Flèche_gauche.png" height="100" width="89"></button></td>
+			</tr>
+			<tr>
+				<td style="height: 20%">&nbsp;</td>
+			</tr>
+		</table>
+
+		  		</td>
+		<td class="auto-style6" style="height: 100%">
+		<table align="center" cellpadding="0" cellspacing="0">
+			<tr>
+				<td style="width: 100%; height: 100%">
+				<video id="Oeuvre_Vid" controls autoplay src="Projet/GIF_Homer.mp4" width="500"></video></td>
+			</tr>
+			<tr>
+				<td style="height: 19px">&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="height: 19px">
+				<p id="Titre_Vid"><b>Projet GIF</b></p>
+				<ul>
+				<li class="auto-style12"><b>Créateur:</b> Pascal Pelletier-Thériault</li>
+				<li class="auto-style12"><b>Logiciel utilisé:</b> 
+				<a href="https://www.adobe.com/products/photoshop.html?sdid=KKQIN&amp;mv=search&amp;s_kwcid=AL!3085!3!226997989086!e!!g!!photoshop&amp;ef_id=WZJvFAAAAEqaZhFT:20180507023823:s" target="_blank">Photoshop</a> 
+				et&nbsp;
+				<a href="https://www.movavi.com/fr/support/how-to/imovie-for-windows.html?gclid=EAIaIQobChMInvnmwOf02gIVDFqGCh2oUwnGEAAYASAAEgIq8PD_BwE" target="_blank">Imovie</a></li>
+				</ul>
+				<p id="Description_Vid">Le projet consistait à faire une image animée de format GIF.</p>
+</td>
+			</tr>
+		</table>
+		</td>
+		<td class="auto-style6" valign="top">	 <table align="center" cellpadding="20" cellspacing="0">
+			<tr>
+				<td style="height: 10%">&nbsp;</td>
+			</tr>
+			<tr>
+				<td style="height: 70%">
+				<button onclick="Vidplus()"><img alt="Flèche" src="Boutons_et_Images_créés/Flèche_droit.png" height="100" width="89"></button></td>
+			</tr>
+			<tr>
+				<td style="height: 20%">&nbsp;</td>
+			</tr>
+		</table>
+ </td>
+	</tr>
+</table>
+
+&nbsp;
+<p>&nbsp;</p>
+
+<article><footer>Dernière mise à jour: 05-05-2018 &nbsp;&nbsp;&nbsp; Pascal  Pelletier-Thériault &nbsp;&nbsp;&nbsp; ©&nbsp;2018</footer></article>
+</body>
+
+</html>
