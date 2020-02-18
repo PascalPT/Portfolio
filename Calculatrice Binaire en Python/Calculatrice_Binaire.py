@@ -1,4 +1,4 @@
-# La racine est très imprécise à cause du nombre d’itérations. Augmenter les itérations régleraient cela .
+# La racine peut être imprécise à cause du nombre d’itérations. Augmenter les itérations régleraient cela .
 #Le GUI fonction si le fichier avec les fonctions est nommé Calculatrice_binaire.py
 
 """ # Sans GUI
