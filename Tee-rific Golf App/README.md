@@ -1,4 +1,5 @@
-Charles Berthiaume, Geneviève Moisan, Michaël Nadeau, Pascal Pelletier-Thériault
+Pascal Pelletier-Thériault
+(Charles Berthiaume, Geneviève Moisan, Michaël Nadeau)
 
 Mandat : Élaborer un modèle qui utilise la théorie de la crédibilité afin de prévoir le total d'une ronde de golf d'un quatuor à partir du nombre de coups joués par l'équipe aux trous précédents. 
 		 Dans le but d'obtenir le meilleur modèle possible, trois modèles ont été créés. Ils ont été comparés et le meilleur modèle a été utilisé pour produire un prototype d'application 
