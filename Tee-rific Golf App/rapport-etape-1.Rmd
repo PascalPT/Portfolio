@@ -1,0 +1,40 @@
+---
+title: "Premier rapport d'étape"
+author: "Charles Berthiaume, Geneviève Moisan, Michaël Nadeau & Pascal Pelletier-Thériault"
+date: "2/12/2021"
+output: pdf_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#### Mandat:
+
+Le mandat consiste à établir trois modèles de prévision qui utilisent la théorie de la crédibilité afin de prévoir le nombre total de coups lors d'une ronde de golf d'un quatuor, à partir de résultats connus. Ces modèles serviront à produire une application avec la technologie Shiny dans le but de prévoir des résultats avec des données partielles. À ce stade-ci, nous devons établir un modèle de crédibilité bayésienne.
+
+#### Réalisations:
+
+Nous avons commencé par effectuer le nettoyage des données à l'aide d'une fonction R que nous avons réalisée. Lorsqu'un score est absurde (i.e. supérieur à 10 ou inférieur à 1) ou tout simplement manquant, nous utilisons la formule suivante pour remplacer ce dernier: $Normale + [\frac{\sum_{i=1}^{17} {score_i - normale_i}}{17}]$
+
+Par après, nous avons établi le modèle mathématique suivant pour prédire les valeurs recherchées:
+
+$$S_t = \sum_{j = 1}^{18}(X_{t,j}+1)$$
+$S_t$: Total d'une ronde de golf pour le $t^e$ quatuor.
+
+Nous avons choisi une loi binomiale puisqu'il nous fallait une distribution avec un domaine discret et limité (n). De plus, les histogrammes empiriques des 18 trous ressemblent à des lois binomiales.
+
+
+$X_{t,j}$: Le nombre de coups supplémentaires de la $t^e$ équipe au $j^e$ trou. $(X_{t,j} | \Theta = \theta) \sim Bin(n, \theta)$
+\newline
+n: Nombre maximal de coups supplémentaires ( 9 (maximum corrigé) - 1 (minimum) = 8 )
+
+À priori, nous assumons que $\Theta$ suit une loi bêta ayant deux paramètres égaux. La distribution bêta nous permet d'avoir une probabilité avec son domaine borné par 0 et 1.
+
+$\Theta$: Probabilité de faire un coup supplémentaire. $\Theta \sim Bêta(\alpha, \beta)$
+
+Les données complètes nous permettront de déduire la loi à postériori de la distribution de chacun des trous. Cela étant dit, la variable aléatoire suivante illustre le modèle sur lequel nous nous appuierons pour prédire la performance des quatuors.
+
+$$(\Theta|\mathbf{S}=\mathbf{x}) \sim Bêta(\hat{\alpha} = \alpha + \sum_{i=1}^{2000}X_i,\space \hat{\beta} = \beta + n - \sum_{i=1}^{2000}X_i )$$
+
+#### Apprentissages:
+
+Nous avons appris, lors du café du savoir, que réserver une partie des données complètes dans l'optique de pouvoir tester nos trois modèles une fois ces derniers développés serait une bonne idée. La fraction des données étant réservée n'a toutefois pas encore été choisie. De plus, la pertinence de diviser les données en classes en fonction du résultat du quatuor a été remise en question. Selon M. Devost, la loi à postériori que nous obtiendrons tiendra compte de la performance de chaque quatuor sans nécessiter que nous les classions. Puisque, jusqu'à présent, nous avons eu de la difficulté à trouver des disponibilités communes, nous avons l'intention de nous rencontrer chaque semaine lors de la plage horaire du cours lorsque ce dernier n'a pas lieu. Nous avons également eu de la difficulté à gérer les versions de nos fichiers. On compte donc employer davantage GIT à l'avenir.

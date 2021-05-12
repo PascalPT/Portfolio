@@ -1,0 +1,56 @@
+---
+title: "Troisième rapport d'étape"
+author: "Charles Berthiaume, Geneviève Moisan, Michaël Nadeau & Pascal Pelletier-Thériault"
+date: "02/04/2021"
+output: pdf_document
+---
+  ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#### Mandat :
+
+Notre mandat est d'établir un modèle de crédibilité de Bühlmann-Straub afin de prédire le nombre de coups joués par un 
+quatuor lors d'une ronde de golf.
+
+#### Réalisations :
+
+Nous avons établi un modèle de Bühlmann-Straub. Nous utilisons les normales des trous pour représenter l'exposition au risque $\omega_t$. Ainsi, chaque observation $X_{it}$ est donnée par : 
+$$X_{it} = \frac{S_{it}}{\omega_t}.$$
+\begin{tabular}{ll}
+$S_{it}$ : le nombre de coups du $i^e$ quatuor au $t^e$ trou & $\omega_t$ : la normale au $t^e$ trou
+\end{tabular} \linebreak
+\begin{tabular}{l}
+$X_{it}$ : le ratio entre le nombre de coups du $i^e$ quatuor au $t^e$ trou et la normale au $t^e$ trou \end{tabular}
+
+La variance inter $\hat a$ et la variance intra $\hat s^2$ sont trouvés avec les données complètes et ces formules :
+$$
+\begin{aligned}
+\hat a = \frac{\omega_{\Sigma \Sigma}}{\omega_{\Sigma \Sigma}^2 - \sum_{i=1}^{I}\omega_{i \Sigma}^2} (\sum_{i=1}^{I} \omega_{i \Sigma}(X_{i\omega} - X_{\omega \omega})^2-(I-1)\hat s ^2); &&
+\hat s ^2= \frac{1}{I(n-1)}\sum_{i=1}^{I}\sum_{t=1}^{n} \omega_{t}(X_{it}-X_{i \omega})^2 .
+\end{aligned}
+$$
+\begin{tabular}{lll}
+  $\omega_{i \Sigma}$ : la somme des normales pour la $i^e$ équipe & $\omega_{\Sigma \Sigma}$ : la somme des $\omega_{i \Sigma}$ & $X_{i \omega}$ : la somme des ratios pour la $i^e$ équipe
+  \end{tabular} \linebreak
+  \begin{tabular}{llll}
+  $X_{\omega \omega}$ : la somme des $X_{i \omega}$ & I : le nombre d'équipes & $\omega_{t}$ : la normale au $t^e$ trou & n : le nombre de trous
+  \end{tabular}
+
+À partir de $\hat a$ et de $\hat s^2$, nous trouvons les facteurs de crédibilité pour le $i^e$ quatuor $\hat z_i$, puis nous trouvons $\hat m$ :
+$$
+\begin{aligned}
+\hat z_i = \frac{\omega_{i \Sigma}}{\omega_{i \Sigma} + \frac{\hat s ^2}{\hat a}}; &&
+\hat m = X_{zw} = \sum_{i=1}^{I}\frac{\hat z_i}{\hat z_ \Sigma}X_{i \omega}.
+\end{aligned}
+$$
+$z_\Sigma$ : la somme de tous les facteurs de crédibilité
+
+Les facteurs de crédibilité $\hat z_i$ nous permettent de calculer l'estimateur $\tilde a$ qui est positif et sans biais comparativement à $\hat a$. $\tilde a$ est calculé avec la formule itérative suivante : 
+$$\tilde a = \frac{1}{I - 1}\sum_{i=1}^{I}\hat z_i(X_{i \omega} - X_{z \omega})^2.$$
+Nous recalculons les facteurs de crédibilité $\hat z_i$ avec $\tilde a$ au lieu de $\hat a$. Nous pouvons ensuite calculer la prédiction du nombre de coups joués par le $i^e$ quatuor au trou suivant ($\hat \pi_{i, \psi+1}$) avec la formule suivante :
+$$\hat \pi_{i, \psi+1} = \hat z_i \times \bar X_{i \omega} + (1 - \hat z_i) \times X_{z \omega}.$$
+Le total d'une ronde de golf pour la $i^e$ équipe est : $\sum_{k=1}^{\psi} \vec{\pi}_{i, k} + \sum_{k = 1}^{18-\psi} \hat{\pi}_{i, k}$, où $\vec{\pi}_{i,k}$ sont les résultats connus. 
+
+#### Apprentissages :
+
+Lors du café du savoir, nous avons appris qu'il fallait utiliser les données complètes pour calculer $\hat s^2$ au lieu des données partielles. Aussi, nous avons appris comment calculer $\hat{s}^2$ et $\tilde{a}$, à partir de la fonction *cm*.  Jusqu'à présent, nous avons travaillé ensemble pour faire les travaux préparatoires aux cafés du savoir, les rapports d'étape et les codes des modèles. Pour la suite, nous nous sommes séparés les tâches. Charles s'occupera de l'interface utilisateur Shiny, Geneviève s'occupera du rapport final, Michaël et Pascal feront la vidéo. Nous continuerons de s'entraider en cas de difficultés et de faire des rencontres périodiques. Pour l'instant, notre méthode de travail a été efficace et nous n'avons pas eu de problèmes.

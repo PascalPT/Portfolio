@@ -1,0 +1,54 @@
+---
+title: "Premier rapport d'étape"
+author: "Charles Berthiaume, Geneviève Moisan, Michaël Nadeau & Pascal Pelletier-Thériault"
+date: "5/3/2021"
+output: pdf_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#### Mandat:
+
+À ce stade-ci de notre travail, notre mandat est d'établir un modèle de crédibilité de Bühlmann afin de prédire le nombre de coups joués par un quatuor lors d'une ronde de golf. De plus, nous avons opté pour une approche non paramétrique.
+
+#### Réalisations:
+
+Premièrement, nous manipulons nos données de façon à obtenir le ratio entre le nombre de coups joués par une équipe à un trou et la normale de ce trou $\pi_ = \frac{nombre\; de \; coups \; joués \; à \; un \; trou}{normale \; de \; ce \; trou}$. Nous avons utilisé deux modèles mathématiques s'appuyant sur la formule suivante pour faire les prévisions: 
+
+$$\pi_{n+1} = z \times \bar{\pi} + (1-z)\times m = \frac{n}{n+s^2/a}\times\bar{\pi} + \frac{s^2/a}{n+s^2/a}\times m$$
+\begin{tabular}{ll}
+   $\pi_{n+1}$: le ratio d'un quatuor au $(n+1)^e$ trou & $\bar{\pi}$: le ratio moyen du quatuor aux n premiers trous \\
+   a: la variance inter & n: nombre de trous joués par une équipe \\
+   $s^2$: la variance intra & \\
+\end{tabular}
+
+$s^2$, a et m sont estimés à l'aide des données complètes. $\bar{\pi}$ et n sont calculés à partir des données partielles.
+$$
+\begin{aligned}
+\hat{m} = \bar{S} = \frac{1}{In} \sum_{i=1}^{I}\sum_{t=1}^{n}S_{it} &&
+\hat{s}^2 = \frac{1}{I(n-1)} \sum_{i=1}^{I} \sum_{t=1}^{n}(S_{it} - \bar{S_i})^2  &&
+\hat{a} = \frac{1}{I-1}\sum_{i=1}^{I}(\bar{S}_i - \bar{S})^2 - \frac{\hat{s}^2}{n}
+\end{aligned}
+$$
+
+\begin{tabular}{ll}
+   n: nombre de trous & I: nombre de quatuors \\
+   $S_{it}$: le ratio de la $i^e$ équipe au $t^e$ trou & $\bar{S_i}$: le ratio moyen de la $i^e$ équipe aux normales  \\
+\end{tabular}
+
+
+Avec la première méthode, nous obtenons le ratio pour chacun des trous qui n'ont pas été joués par l'équipe avec les formules suivantes:
+
+$$
+\begin{aligned}
+\hat{\pi}_{n+1} = \frac{\sum_{t=1}^{n} \pi_t}{n+\hat{s}^2/\hat{a}}+ \frac{\hat{s}^2/\hat{a}}{n+\hat{s}^2/\hat{a}}\times \hat{m} &&
+\hat{\pi}_{n+2}= \frac{\sum_{t=1}^{n} \pi_t + \hat{\pi}_{n+1}}{(n+1)+\hat{s}^2/\hat{a}}+ \frac{\hat{s}^2/\hat{a}}{(n+1)+\hat{s}^2/\hat{a}}\times \hat{m}
+\end{aligned}
+$$
+Avec la seconde méthode, nous prévoyons le ratio d'un seul trou et ce dernier est le même pour chaque trou. Dans les deux méthodes, le ou les ratios obtenus sont multipliés par la normale des trous qui n'ont pas été joués. Le nombre de coups prédit pour chaque trou est ensuite sommé pour prédire le résultat d'une ronde d'un quatuor.
+
+#### Apprentissages:
+
+Lors du café du savoir, nous avons appris qu'il est pertinent d'utiliser un ratio plutôt que l'écart entre la normale et le nombre de coups joués par un quatuor à ce trou parce que le ratio tient compte du niveau de difficulté du trou. De plus, les tests de nos deux modèles ont montré que la deuxième méthode est optimale étant donné qu'elle aboutit aux mêmes résultats que la seconde méthode, mais plus rapidement. Aussi, il n'était pas nécessaire de calculer $\hat{s}^2$ et $\hat{a}$, puisqu'on pouvait déduire leur ratio de la fonction *cm*.
+
+Au total, nous avons passé environ quatre heures pour développer le modèle sur R. Notre estimation faite au café du savoir était donc adéquate. Nous n'avons pas manqué de temps, car nous avons fait preuve d'assiduité.

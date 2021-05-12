@@ -1,0 +1,250 @@
+---
+title: "Rapport final"
+author: "Charles Berthiaume, Geneviève Moisan, Michaël Nadeau, Pascal Pelletier-Thériault"
+date: "23/04/2021"
+output: pdf_document
+
+header-includes:
+- \usepackage{ragged2e}
+- \usepackage{hyperref}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Mandat
+
+La première portion du mandat consiste à concevoir un modèle de crédibilité pour prévoir le total d'une ronde de golf d'un quatuor, à partir du nombre de coups joués aux trous précédents. La deuxième portion du mandat consiste à concevoir et à mettre en production un prototype d'application de calcul des prévisions avec la technologie Shiny. Avec ce prototype d'application de calcul des prévisions, une équipe volante qui se trouve à un trou déterminé sur un terrain de golf pourra rencontrer les quatuors pour prédire le total de leur ronde de golf. L'équipe volante n'aura qu'à entrer le nombre de coups joués à chacun des trous jusqu'à présent par le quatuor et la prédiction sera calculée par l'application. De plus, nous devons prédire le total d'une ronde de golf de 600 quatuors à partir de leurs résultats partiels.  
+
+## Réalisations
+
+**Nettoyage des données :** D'abord, nous avons fait le nettoyage des données à l'aide d'une fonction R que nous avons réalisée. Lorsqu'un nombre de coups joués est erroné, c'est-à-dire inférieur à 1 ou supérieur à 10, ou manquant, la formule suivante est utilisée pour le remplacer : $Normale_i \times [\frac{\sum_{j=1,\space j\neq i}^{17} {score_j / normale_j}}{17}]$. Cette formule tient compte du talent du quatuor. La donnée est remplacée par la normale du trou à laquelle est multipliée la moyenne du ratio entre les autres trous et leur normale. Nous avons considéré qu'un nombre de coups est erroné s'il est inférieur à 1 parce qu'au golf, il faut frapper un moins un coup pour compléter un trou. Nous avons aussi considéré qu'un nombre de coups supérieur à 10 est erroné parce que dans les données complètes, le nombre de coups joués passe de 9 à 30. Puisque cela est un écart important, nous croyons que ces données sont une faute de transcription. 
+
+**Conception des modèles :** Afin d'élaborer un modèle de crédibilité qui fournit des prévisions fiables, nous avons conçu plusieurs modèles. Nous avons fait des modèles basés sur la théorie bayésienne, deux modèles de Bühlmann et un modèle de Bühlmann-Straub.
+
+En ce qui concerne les modèles bayésiens, puisque nous ne connaissons pas la distribution des trous, nous avons élaboré plusieurs modèles avec des distributions différentes. 
+  
+Nous avons d'abord construit un modèle bayésien ayant comme distribution un mélange binomiale-bêta. Nous avons choisi une loi binomiale puisqu'il fallait une distribution avec un domaine discret et limité. De plus, nous avons fait des histogrammes empiriques avec le nombre de coups joués pour les 18 trous et nous trouvions qu'ils ressemblaient à des lois binomiales. Nous avons choisi de faire un mélange avec la distribution bêta puisqu'elle nous permet d'avoir une probabilité avec un domaine borné par 0 et 1. Nous avons ensuite séparé les trous en fonction de leur normale et nous avons trouvé les paramètres empiriques initiaux à l'aide des données complètes.
+Par curiosité, nous avons fait un deuxième modèle bayésien avec une seule distribution du même mélange (binomiale-bêta), mais avec les données normalisées. Avec ce modèle, les résultats connus des quatuors à chacun des trous ont été divisés par la moyenne du nombre de coups joués pour ce trou dans les données complètes (espérance) et ensuite multipliés par la somme de ces espérances (l'utilisation de l'espérance dans ce modèle et tous les autres est basée sur le gain de précision que cela amène).
+
+Nous avons aussi construit deux autres modèles bayésiens ayant comme distributions un mélange normale-normale et un mélange poisson-gamma. Nous avons vérifié s'il était possible d'obtenir de meilleures prévisions avec ces lois, puisqu'il était difficile de déterminer avec certitude la distribution des trous. Les paramètres initiaux sont trouvés avec les données complètes et les données sont normalisées de la même façon qu'avec le mélange binomiale-bêta. 
+  
+Ensuite, nous avons élaboré deux modèles de crédibilité de Bühlmann. Nous avons utilisé une approche non paramétrique, puisque la distribution des trous est inconnue. De plus, pour obtenir des résultats plus intuitifs, nous avons utilisé le ratio entre le nombre de coups joués par une équipe à un trou et l'espérance de ce trou $\pi_ = \frac{nombre\; de \; coups \; joués \; à \; un \; trou}{espérance \; de \; ce \; trou}$. Le modèle mathématique s'appuie sur la formule suivante pour faire les prévisions : 
+
+$$\pi_{g+1} = z \times \bar{\pi} + (1-z)\times m = \frac{g}{g+s^2/a}\times\bar{\pi} + \frac{s^2/a}{g+s^2/a}\times m.$$
+\begin{tabular}{ll}
+   $\pi_{g+1}$: le ratio d'un quatuor au $(g+1)^e$ trou & $\bar{\pi}$: le ratio moyen du quatuor aux n premiers trous \\
+   a: la variance inter & $g$: nombre de trous joués par une équipe \\
+   $s^2$: la variance intra & \\
+\end{tabular}
+
+$s^2$, a et m sont estimés à l'aide des données complètes. $\bar{\pi}$ et n sont calculés à partir des données partielles.
+$$
+\begin{aligned}
+\hat{m} = \bar{S} = \frac{1}{In} \sum_{i=1}^{I}\sum_{t=1}^{n}S_{it} &&
+\hat{s}^2 = \frac{1}{I(n-1)} \sum_{i=1}^{I} \sum_{t=1}^{n}(S_{it} - \bar{S_i})^2  &&
+\hat{a} = \frac{1}{I-1}\sum_{i=1}^{I}(\bar{S}_i - \bar{S})^2 - \frac{\hat{s}^2}{n}
+\end{aligned}
+$$
+
+\begin{tabular}{ll}
+   n: nombre de trous & I: nombre de quatuors \\
+   $S_{it}$: le ratio de la $i^e$ équipe au $t^e$ trou & $\bar{S_i}$: le ratio moyen de la $i^e$ équipe aux normales  \\
+\end{tabular}
+
+Avec la formule suivante : 
+$$\hat{\pi}_{g+1} = \frac{\sum_{t=1}^{g} \pi_t}{g+\hat{s}^2/\hat{a}}+ \frac{\hat{s}^2/\hat{a}}{g+\hat{s}^2/\hat{a}}\times \hat{m},$$  
+
+nous prévoyons le ratio d'un seul trou et ce ratio est le même pour chaque trou qui n'a pas été joué. Le ratio obtenu est multiplié par l'espérance du trou qui n'a pas été joué. Cela est fait pour chaque trou non joué. Le nombre de coups prédit pour chaque trou est ensuite sommé pour prédire le résultat d'une ronde d'un quatuor. 
+Nous avons aussi fait le même modèle, mais en itérant pour chaque trou non joué, c'est-à-dire que la prédiction du premier trou non joué était utilisée avec les trous joués pour prédire le nombre de coups du prochain trou non joué, et ainsi de suite. Nous obtenons de cette façon des ratios différents pour chacun des trous qui n'ont pas été joués. Au final, nous obtenons la même prédiction pour le total de la ronde de golf, mais le temps d'exécution est beaucoup plus long avec la deuxième méthode.
+
+Finalement, nous avons créé un modèle de Bühlmann-Straub. Dans ce modèle, les normales des trous sont utilisées pour représenter l'exposition au risque $\omega_t$. La variance inter $\hat a$ et la variance intra $\hat s^2$ sont trouvées avec les données complètes. Nous avons trouvé les facteurs de crédibilité qui nous permettent de calculer l'estimateur $\tilde a$ (positif et sans biais). Nous recalculons les facteurs de crédibilité avec $\tilde a$ au lieu de $\hat a$. Nous pouvons ensuite calculer la prédiction du nombre de coups joués par le $i^e$ quatuor au trou suivant. Le résultat total d'une ronde de golf pour le $i^e$ quatuor peut ainsi être calculé. 
+  
+**Choix du meilleur modèle :** Afin de déterminer le modèle le plus fiable parmi les modèles que nous avons élaborés, le quart des données complètes (500 données) a été utilisé. Nous avons fait une fonction R qui retire aléatoirement un certain nombre de coups joués à des trous aléatoires. Tous les modèles ont été utilisés successivement pour prédire les résultats de chacun des trous sur ces données tronquées. Ainsi, nous avons comparé cette prédiction avec le résultat réel de ces rondes, ce qui permet d'utiliser l'erreur absolue moyenne pour choisir le meilleur modèle. L'erreur absolue moyenne obtenue de chacun des modèles lorsque 6 trous sont joués est indiquée ci-dessous :
+
+### Tableau 1 : Erreurs moyennes absolues avec 6 trous joués
+\begin{center}
+\begin{tabular}{ll}
+   Modèle & Erreur absolue moyenne \\
+    &  \\
+   Binomiale-Bêta (Par type de normale) & 3,62 \\
+   Binomiale-Bêta (Normalisée) & 4,3 \\
+   Normale-Normale & 3,51 \\
+   Poisson-Gamma & 4,33 \\
+   Bühlmann & 3,51 \\
+   Bühlmann-Straub & 4,3 \\
+\end{tabular}
+\end{center}
+
+Pour compléter le fichier des résultats partiels, nous avons utilisé le meilleur modèle en fonction du nombre de trous joués par chaque quatuor. C'est-à-dire que si 4, 6, 13, 14 ou 15 trous sont joués, nous utilisons le modèle Normale-Normale qui est plus précis dans ces cas sinon le modèle Bühlmann est utilisé. Cependant, pour le prototype d'application Shiny, c'est le modèle de Bühlmann qui est considéré être le meilleur, puisqu'il est plus performant dans la majorité des cas.
+
+**Prototype d'application de calcul des prévisions :** Avec notre prototype d'application de calcul des prévisions, il est possible de prédire le total d'une ronde de golf à partir de tous les modèles que nous avons élaborés. La meilleure prédiction est obtenue avec le modèle qui est choisi par défaut, soit le modèle 'Bühlmann'. Pour obtenir une prédiction, il suffit d'entrer les résultats obtenus par le quatuor aux trous qui ont été joués. L'application indique une prédiction pour chacun des trous qui n'ont pas été joués. Le nombre total de coups prédit pour une ronde est indiqué en haut de l'interface d'application. L'application peut aussi calculer l'écart absolu moyen des modèles pour un nombre de trous joués désirés.   
+
+## Apprentissages
+
+Grâce à ce mandat, nous avons beaucoup appris sur la théorie de la crédibilité. Nous avons entre autres appris à élaborer des modèles bayésiens, des modèles de Bühlmann et un modèle de Bühlmann-Straub. Nous avons aussi appris à utiliser la fonction *cm* du paquetage actuar pour calculer le ratio $\hat{s}^2/\hat{a}$. De plus, nous avons un peu plus appris à travailler avec Shiny, puisque certains d'entre nous ne l'avaient jamais utilisé et les autres l'avaient utilisé très peu. Finalement, nous avons appris à bien travailler en équipe dans le contexte sanitaire que nous connaissons. Nous avons réalisé tout le mandat en travaillant à distance, sans jamais nous rencontrer en personne. Tout le travail d'équipe s'est fait via des conférences virtuelles pendant lesquelles nous partagions nos écrans pour montrer à nos coéquipiers le travail que nous avions accompli.  
+
+Ce que nous avons amélioré, au fil des semaines, est notre assiduité. Au début, nous n'élaborions pas nos modèles de crédibilité au fur et à mesure. Nous nous sommes rendu compte que le temps passait vite et qu'il y avait beaucoup de travail à faire. Nous avons donc établi une plage horaire pour faire une rencontre hebdomadaire. Pendant cette plage horaire, nous travaillions ensemble pour avancer le mandat le plus possible. Si le travail n'était pas terminé à la fin de notre rencontre, nous le séparions entre nous pour le terminer avant la prochaine rencontre. De plus, nous avons continué d'améliorer nos modèles de crédibilité jusqu'à la fin du mandat. Par exemple, au début, nous ajoutions un coup à nos modèles bayésiens pour tenir compte du fait qu'il faut jouer au moins un coup pour compléter un trou au golf. Nous nous sommes cependant rendu compte avec les semaines que cela n'était pas nécessaire puisqu'il n'y avait pas de nombre de coups inférieur à un dans les données. 
+  
+Ce que nous avons trouvé difficile dans ce mandat est l'élaboration du modèle de Bühlmann. Nous avons trouvé difficile d'utiliser la fonction *cm* pour calculer le ratio $\hat{s}^2/\hat{a}$ puisque nous ne l'avions jamais utilisée. De plus, nous avons trouvé difficile de faire le prototype d'application de calcul des prévisions, puisque nous avions peu travaillé avec l'application Shiny auparavant. D'ailleurs, nous n'avons pas réussi à mettre des accents dans notre application Shiny hébergée sur \href{https://pascal-pell-ther.shinyapps.io/tee_rific_golf_app}{\underline{shinyapps.io}}.   
+
+\newpage
+
+\section{Annexe I}
+\label{sec:Annexe I} 
+
+### Normalisation
+
+Pour pouvoir comparer les données des trous joués sur un même pied d'égalité, il est important de les normaliser ou de les séparer en groupes plus ou moins homogènes (par exemple en fonction des normales).
+
+La normalisation des scores en observations $x_j$, $y_j$, $z_j$, ..., est faite avec :
+
+$$ratio_j = \left\{
+    \begin{array}{l}
+        score_j/normale_j \\
+        score_j/moyenne_j \\
+    \end{array}
+\right.$$
+
+$$x_j \text{ , } y_j \text{ , ...} = ratio_j \times \left\{
+    \begin{array}{l}
+        \text{somme des normales de la ronde}\\
+        \text{résultat moyen de la ronde} \\
+    \end{array}
+    \right.
+    $$
+Ces observations peuvent alors être utilisées dans les différents modèles présentés.
+
+### Dénormalisation
+
+La prédiction des modèles aura la même forme que la normalisation. Il faut donc la dénormaliser. Cela se  fait avec les opérations suivantes :
+
+$$\pi_j = \pi / \left\{
+    \begin{array}{l}
+        \text{somme des normales de la ronde}\\
+        \text{résultat moyen de la ronde} \\
+    \end{array}
+    \right.
+    \times
+    \left\{
+    \begin{array}{l}
+        normale_j \\
+        moyenne_j \\
+    \end{array}
+   \right. _.
+    $$
+
+Avec les prédictions pour chaque trou, il est alors possible d'obtenir une prédiction totale pour la ronde.
+
+$$\text{prédiction totale de la ronde} = \sum_{\text{j = 1 et j est un trou non joué}}^{18}(\pi_j) \text{ + les scores des trous joués} $$
+
+À noter que pour les modèles suivants : modèle bayésien normal-normal, modèle Bühlmann et modèle Bühlmann-Straub ne nécessitent pas la multiplication et la division par la somme des normales ou le résultat moyen des rondes.
+
+\newpage
+
+\section{Annexe II}
+\label{sec:Annexe II} 
+
+### Modèles bayésiens
+
+Pour plus d'informations sur les démarches pour obtenir les paramètres initiaux de tous les modèles présentés ici, voir : \href{https://projets.fsg.ulaval.ca/git/projects/H2021-12657/repos/111237261_equipe19/raw/Autre/D%C3%A9marche-Mod%C3%A8le.png?at=refs%2Fheads%2Fdevel-PPT}{\underline{Nos démarches complètes.}}
+
+Pour plus d'informations sur comment arriver aux lois à postériori voir : \href{https://vigou3.gitlab.io/theorie-credibilite-avec-r/}{\underline{Document de référence par Vincent Goulet.}}
+
+$$X \sim \text{Loi binomiale} (n, \Theta)\text{;  } \Theta \sim \text{Loi Bêta} (a, b)$$
+
+$$E(X|x_1,x_2,...) = n \times E(\Theta|x_1,x_2,...)$$
+$$P(\Theta = \theta |x_1,x_2,...) \propto \int_{0}^{1} \theta^{a-1} (1-\theta) \times P(X_1 = x_1)\times P(X_2=x_2)...d\theta $$
+$$\Theta|x_1,x_2,... \sim \text{Loi Bêta}(a+\sum_{i=1}^{\text{nb de x}}(x_i)\text{ ; } b + n \times (\text{nb de x})-\sum_i^{\text{nb de x}} x_i)$$
+$$\Rightarrow E(X|x_1,x_2,...) = n \times \frac {a+\sum_{i=1}^{\text{nb de x}}(x_i)} {a + b + n \times (\text{nb de x})} $$
+$$\Rightarrow \text{paramètres initiaux a et b : }E(X) = E(E(X|\Theta)) \text{ et } Var(X) = Var(E(X|\Theta)) + E(Var(X|\Theta))$$
+$$\Rightarrow E(X) = E(n\Theta) \text{ et } Var(X) = Var(n\Theta)) + E[n(\Theta)(1-\Theta)]$$
+$$\text{Avec }E(X) \text{ , } Var(X) \text{ et n qui sont estimés grâce aux données complètes}.$$
+
+$$\Leftrightarrow \hat{a} = \frac{E(\Theta)\times(1-E(\Theta)-Var(\Theta))} {Var(\Theta)}$$
+$$\Leftrightarrow \hat{b} = \frac{\hat{a}\times(1-E(\Theta))} {E(\Theta)}$$
+$$\Leftrightarrow n = max(\text{données complètes})$$
+
+Pour le modèle bayésien par type de normale les données sont séparées en 3 groupes selon la normale. Il y aura donc 3 lois à postériori calculées pour chaque type de trou. Pour le modèle bayésien binomial normalisé, comme mentionné dans **Réalisations**, les données sont normalisées (Voir \hyperref[sec:Annexe I]{\underline{Annexe I}}  pour plus d'informations). Il y a donc qu'une seule loi à postériori. Finalement, la prédiction pour les trous non joués pour un quatuor est faite avec :
+
+$$\pi_j = \frac{n \times \hat{a}}{\hat{a}+\hat{b}}$$
+$\pi_j$ : la prédiction pour la sorte de trou j. (Lorsqu'il y a normalisation, il n'y a qu'une sorte de trou sinon il y en a 3 soit normale = 3, normale = 4 et finalement normale = 5)
+\newline
+\center
+___________________________________________________________________
+\newline
+\raggedright
+
+$$Y \sim \text{Loi poisson} (\Omega)\text{;  } \Omega \sim \text{Loi Gamma} (\alpha , \lambda)$$
+$$P(\Omega = \omega |y_1,y_2,...) \propto \int_{0}^{\infty} \lambda^\omega / \omega!\times P(Y_1 = y_1)\times P(Y_2=y_2)...d\omega $$
+$$\Omega|y_1,y_2,... \sim \text{Loi Gamma}(\alpha+\sum_{i=1}^{\text{nb de x}}(y_i)\text{ ; } \lambda + n)$$
+De la même façon que précédemment, les paramètres initiaux peuvent être estimés.
+$$\Leftrightarrow \hat{\lambda} = \frac{E(Y)}{Var(Y)-E(Y)}$$
+$$\Leftrightarrow \hat{\alpha} = \hat{\lambda} \times E(Y)$$
+Puis, la prédiction pour les trous non joués pour un quatuor est faite avec :
+
+$$\pi = E(Y|y_1,y_2,...) = \alpha_1/\lambda_1$$
+\newline
+\center
+___________________________________________________________________
+\newline
+\raggedright
+
+$$Z \sim \text{Loi normale} (\mu,\sigma^2)\text{;  } \mu \sim \text{Loi Normale} (\mu_0 , \sigma_0^2)$$
+
+Voir : \underline{\href{http://www.ams.sunysb.edu/~zhu/ams570/Bayesian_Normal.pdf?fbclid=IwAR0vNmkSsLEjEg2Ho8eF6iEM-y5VDBGHzrXn_g3PFwfwVJKdplFZH1mx3Z0}{Document de référence par l'université de Stony Brook}} pour le développement complet.
+
+Une prédiction pour les trous non joués pour un quatuor peut être faite avec :
+
+$$\pi = E(Z) = \mu_1 = \frac{\mu_0\times\sigma^2 + \sum_{i=1}^{\text{nb de trous joués}}\sigma_0^2\times z_i}{\sigma^2 + {\text{(nb de trous joués)}}\times \sigma_0^2}$$
+où 
+$$Var(Z) = \sigma^2 \text{ , } E(Z) = \mu_0 \text{ et } \sigma_0^2 = \sum_{i=1}^{n}\frac{(\mu_i - \bar\mu)^2}{n-1}.$$
+
+
+\newpage
+
+\section{Annexe III}
+\label{sec:Annexe III} 
+
+### Modèle Bühlmann-Straub
+
+Chaque observation $X_{it}$ est donnée par : 
+$$X_{it} = \frac{S_{it}}{\omega_t}.$$
+\begin{tabular}{ll}
+$S_{it}$ : le nombre de coups du $i^e$ quatuor au $t^e$ trou & $\omega_t$ : l'espérance au $t^e$ trou
+\end{tabular} \linebreak
+\begin{tabular}{l}
+$X_{it}$ : le ratio entre le nombre de coups du $i^e$ quatuor au $t^e$ trou et l'espérance au $t^e$ trou \end{tabular}
+
+À noter que l'espérance d'un trou est simplement la moyenne des données complètes à ce trou. L'espérance d'une ronde est la moyenne des résultats des rondes dans les données complètes. 
+
+
+La variance inter $\hat a$ et la variance intra $\hat s^2$ sont trouvées avec les données complètes et ces formules :
+$$
+\begin{aligned}
+\hat a = \frac{\omega_{\Sigma \Sigma}}{\omega_{\Sigma \Sigma}^2 - \sum_{i=1}^{I}\omega_{i \Sigma}^2} (\sum_{i=1}^{I} \omega_{i \Sigma}(X_{i\omega} - X_{\omega \omega})^2-(I-1)\hat s ^2); &&
+\hat s ^2= \frac{1}{I(n-1)}\sum_{i=1}^{I}\sum_{t=1}^{n} \omega_{t}(X_{it}-X_{i \omega})^2 .
+\end{aligned}
+$$
+\begin{tabular}{lll}
+  $\omega_{i \Sigma}$ : somme des espérances jouées de la $i^e$ équipe & $\omega_{\Sigma \Sigma}$ : la somme des $\omega_{i \Sigma}$ & $X_{i \omega}$ : somme des ratios de la $i^e$ équipe
+  \end{tabular} \linebreak
+  \begin{tabular}{llll}
+  $X_{\omega \omega}$ : la somme des $X_{i \omega}$ & I : le nombre d'équipes & $\omega_{t}$ : l'espérance au $t^e$ trou & n : le nombre de trous
+  \end{tabular}
+
+À partir de $\hat a$ et de $\hat s^2$, nous trouvons les facteurs de crédibilité pour le $i^e$ quatuor $\hat z_i$, puis nous trouvons $\hat m$ :
+$$
+\begin{aligned}
+\hat z_i = \frac{\omega_{i \Sigma}}{\omega_{i \Sigma} + \frac{\hat s ^2}{\hat a}}; &&
+\hat m = X_{zw} = \sum_{i=1}^{I}\frac{\hat z_i}{\hat z_ \Sigma}X_{i \omega}.
+\end{aligned}
+$$
+$z_\Sigma$ : la somme de tous les facteurs de crédibilité
+
+Les facteurs de crédibilité $\hat z_i$ nous permettent de calculer l'estimateur $\tilde a$ qui est positif et sans biais comparativement à $\hat a$. $\tilde a$ est calculé avec la formule itérative suivante : 
+$$\tilde a = \frac{1}{I - 1}\sum_{i=1}^{I}\hat z_i(X_{i \omega} - X_{z \omega})^2.$$
+Les facteurs de crédibilité $\hat z_i$ sont recalculés avec $\tilde a$ au lieu de $\hat a$. La prédiction du nombre de coups joués par le $i^e$ quatuor au trou suivant ($\hat \pi_{i, \psi+1}$) est donnée par la formule suivante :
+$$\hat \pi_{i, \psi+1} = \hat z_i \times \bar X_{i \omega} + (1 - \hat z_i) \times X_{z \omega}.$$
+Le total d'une ronde de golf pour la $i^e$ équipe est : $\sum_{k=1}^{\psi} \vec{\pi}_{i, k} + \sum_{k = 1}^{18-\psi} \hat{\pi}_{i, k}$, où $\vec{\pi}_{i,k}$ sont les résultats connus. 
+
